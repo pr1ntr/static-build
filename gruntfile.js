@@ -44,7 +44,7 @@ module.exports = function(grunt) {
                 options: {
                     debug:true,
                     suffix:"",
-                    cdn_root: "<%= pkg.deploy.dev.cdn_root =>"
+                    cdn_root: "<%= pkg.deploy.dev.cdn_root %>"
                 },
                 files: [
                     {
@@ -63,7 +63,7 @@ module.exports = function(grunt) {
                 options: {
                     debug:false,
                     suffix:"min.",
-                    cdn_root: "<%= pkg.deploy.prod.cdn_root =>"
+                    cdn_root: "<%= pkg.deploy.prod.cdn_root %>"
                 }, 
                 files: [
                     {
