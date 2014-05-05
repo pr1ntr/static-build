@@ -162,6 +162,7 @@ module.exports = function(grunt) {
   
 
     grunt.registerTask('default', ['jshint', 'concat','stylus', 'template:dev' , 'connect:dev' , 'watch']);
+    grunt.registerTask('dev', ['jshint', 'concat','stylus', 'template:dev' , 'connect:dev' , 'watch']);
     grunt.registerTask('dist', ['jshint', 'concat', 'uglify' , 'stylus', 'cssmin' ,'template:dist' ]);
     grunt.registerTask('dist:test', ['jshint', 'concat', 'uglify' , 'stylus', 'cssmin' ,'template:dist' , "connect:dist"]);
     grunt.registerTask('bower-init', ['bower' ]);
