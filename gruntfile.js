@@ -2,10 +2,26 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         stylus: {
-            compile: {
+            dist: {
                 options: {
                     paths: ['src/stylus'],
-                    define: {"cdn_root" : "<%= pkg.deploy.cdn_root %>"},
+                    define: {"cdn_root" : "<%= pkg.deploy.prod.cdn_root %>"},
+                    use: [
+                        
+                    ],
+                    import: [      //  @import 'foo', 'bar/moo', etc. into every .styl file
+                      
+                    ]
+                },
+                files: {
+                    'dev/css/<%= pkg.name %>.css': 'src/stylus/index.styl', // 1:1 compile
+                    'dist/css/<%= pkg.name %>.css': 'src/stylus/index.styl', // 1:1 compile
+                }
+            },
+            dev: {
+                options: {
+                    paths: ['src/stylus'],
+                    define: {"cdn_root" : "<%= pkg.deploy.dev.cdn_root %>"},
                     use: [
                         
                     ],
@@ -27,7 +43,8 @@ module.exports = function(grunt) {
                 data: "package.json",
                 options: {
                     debug:true,
-                    suffix:""
+                    suffix:"",
+                    cdn_root: "<%= pkg.deploy.dev.cdn_root =>"
                 },
                 files: [
                     {
@@ -45,8 +62,9 @@ module.exports = function(grunt) {
                 data: 'package.json',
                 options: {
                     debug:false,
-                    suffix:"min."
-                },
+                    suffix:"min.",
+                    cdn_root: "<%= pkg.deploy.prod.cdn_root =>"
+                }, 
                 files: [
                     {
                         expand: true,     // Enable dynamic expansion.
@@ -126,7 +144,7 @@ module.exports = function(grunt) {
             }
         },
         watch: {
-            files: ['<%= jshint.files %>' ,  '<%= stylus.compile.options.paths +"/**/*.styl" %>'],
+            files: ['<%= jshint.files %>' ,  '<%= stylus.dev.options.paths +"/**/*.styl" %>'],
             tasks: ['jshint' , 'concat' , 'stylus'  , 'template:dev']
         },      
         connect: {
