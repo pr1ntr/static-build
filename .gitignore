@@ -18,7 +18,9 @@ node_modules/
 bower_components/
 src/vendor/js/
 src/vendor/css/
-deploy/
+dist/
+dev/
+
 psd/
 *.psd
 
