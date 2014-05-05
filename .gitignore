@@ -15,6 +15,7 @@ results
 maya/
 ignored_assets/
 node_modules/
+bower_components/
 src/vendor/js/
 src/vendor/css/
 deploy/
