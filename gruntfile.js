@@ -15,7 +15,7 @@ module.exports = function(grunt) {
                 },
                 files: {
                     'dev/css/<%= pkg.name %>.css': 'src/stylus/index.styl', // 1:1 compile
-                    'dist/css/<%= pkg.name %>.css': 'src/stylus/index.styl', // 1:1 compile
+                    'dist/css/<%= pkg.name %>.css': 'src/stylus/index.styl' // 1:1 compile
                 }
             },
             dev: {
@@ -31,7 +31,7 @@ module.exports = function(grunt) {
                 },
                 files: {
                     'dev/css/<%= pkg.name %>.css': 'src/stylus/index.styl', // 1:1 compile
-                    'dist/css/<%= pkg.name %>.css': 'src/stylus/index.styl', // 1:1 compile
+                    'dist/css/<%= pkg.name %>.css': 'src/stylus/index.styl' // 1:1 compile
                 }
             }
        
@@ -115,7 +115,7 @@ module.exports = function(grunt) {
                 'dev/css/<%= pkg.name %>-vendors.css' : [
                     'src/vendor/css/**/*.css'
                 ]
-            }, 
+            }
           }
         },
         uglify: {
@@ -126,7 +126,7 @@ module.exports = function(grunt) {
             dist: {
                 files: {
                     'dist/js/<%= pkg.name %>.min.js': ['dev/js/<%= pkg.name %>.js'],
-                    'dist/js/<%= pkg.name %>-vendors.min.js': ['dev/js/<%= pkg.name %>-vendors.js'],
+                    'dist/js/<%= pkg.name %>-vendors.min.js': ['dev/js/<%= pkg.name %>-vendors.js']
                 }
             }
         },
@@ -144,9 +144,50 @@ module.exports = function(grunt) {
             }
         },
         watch: {
-            files: ['<%= jshint.files %>' ,  '<%= stylus.dev.options.paths +"/**/*.styl" %>'],
-            tasks: ['jshint' , 'concat' , 'stylus'  , 'template:dev']
-        },      
+            js : {
+                files: ['<%= jshint.files %>'],
+                tasks: ['jshint' , 'concat' ]
+            },
+            css : {
+                files: ['<%= stylus.dev.options.paths +"/**/*.styl" %>'],
+                tasks: ['stylus:dev' ]
+            },
+            images : {
+                files: ['src/images/**/*.*'],
+                tasks: ['copy:dev']
+            },
+            template: {
+                files : ['<%= template.dev.cwd %>**/*.html'],
+                tasks : ['template:dev']
+            }
+            
+        },
+        copy: {
+            dist: {
+                files: [
+                    {
+                        expand:true,
+                        cwd: "src/images/",
+                        src: ["**"],
+                        dest: "dist/images/",
+                        filter: 'isFile'
+                    }
+
+                ]
+            },
+            dev: {
+                files: [
+                    {
+                        expand:true,
+                        cwd: "src/images/",
+                        src: ["**"],
+                        dest: "dev/images/",
+                        filter: 'isFile'
+                    }
+
+                ]
+            }
+        },     
         connect: {
             dev: {
                 options: {
@@ -172,18 +213,20 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-stylus');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-template-html');
     grunt.loadNpmTasks('grunt-bower');
 
     grunt.loadNpmTasks('grunt-contrib-connect');
 
-  
+    
+    grunt.registerTask('setup', ['bower' , 'dev']);
+    grunt.registerTask('deploy', ['bower' , 'dist']);
 
-    grunt.registerTask('default', ['jshint', 'concat','stylus', 'template:dev' , 'connect:dev' , 'watch']);
-    grunt.registerTask('dev', ['jshint', 'concat','stylus', 'template:dev' , 'connect:dev' , 'watch']);
-    grunt.registerTask('dist', ['jshint', 'concat', 'uglify' , 'stylus', 'cssmin' ,'template:dist' ]);
-    grunt.registerTask('dist:test', ['jshint', 'concat', 'uglify' , 'stylus', 'cssmin' ,'template:dist' , "connect:dist"]);
-    grunt.registerTask('bower-init', ['bower' ]);
-  
+    grunt.registerTask('default', ['jshint', 'concat','stylus:dev', 'template:dev' , 'connect:dev' , 'copy:dev', 'watch']);
+    grunt.registerTask('dev', ['default']);
+    grunt.registerTask('dist', ['jshint', 'concat', 'uglify' , 'stylus', 'cssmin' ,'template:dist' , 'copy:dist']);
+    grunt.registerTask('dist:test', ['jshint', 'concat', 'uglify' , 'stylus', 'cssmin' ,'template:dist' ,'copy:dist' , "connect:dist"]);
+ 
    
 };
