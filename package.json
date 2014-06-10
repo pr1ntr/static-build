@@ -16,7 +16,8 @@
     "grunt-template-html": "^0.1.4",
     "grunt-contrib-copy": "^0.5.0",
     "grunt-contrib-imagemin": "^0.7.1",
-    "grunt-newer": "^0.7.0"
+    "grunt-newer": "^0.7.0",
+    "grunt-contrib-clean": "^0.5.0"
   },
   "engines": {
     "node": "0.10.26",

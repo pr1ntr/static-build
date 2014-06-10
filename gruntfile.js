@@ -14,8 +14,8 @@ module.exports = function(grunt) {
                     ]
                 },
                 files: {
-                    'dev/css/<%= pkg.name %>.css': 'src/stylus/index.styl', // 1:1 compile
-                    'dist/css/<%= pkg.name %>.css': 'src/stylus/index.styl' // 1:1 compile
+                    // 1:1 compile
+                    'dist/css/<%= pkg.name %>.min.css': 'src/stylus/index.styl' // 1:1 compile
                 }
             },
             dev: {
@@ -31,7 +31,7 @@ module.exports = function(grunt) {
                 },
                 files: {
                     'dev/css/<%= pkg.name %>.css': 'src/stylus/index.styl', // 1:1 compile
-                    'dist/css/<%= pkg.name %>.css': 'src/stylus/index.styl' // 1:1 compile
+                    
                 }
             }
        
@@ -83,7 +83,7 @@ module.exports = function(grunt) {
               banner: '/* minified vendor css file */'
             },
             files: {
-              'dist/css/<%= pkg.name %>-vendors-min.css': ['dev/css/<%= pkg.name %>-vendors.css']
+              'dist/css/<%= pkg.name %>-vendors-min.css': ['dist/css/<%= pkg.name %>-vendors.css']
             }
           }
         },
@@ -116,6 +116,22 @@ module.exports = function(grunt) {
                     'src/vendor/css/**/*.css'
                 ]
             }
+          },
+          dist: {
+            // the files to concatenate
+            files: {
+                'dist/js/<%= pkg.name %>.js' : [
+                   
+                    'src/js/base.js',
+                    'src/js/**/*.js'
+                ],
+                'dist/js/<%= pkg.name %>-vendors.js' : [
+                    'src/vendor/js/**/*.js'
+                ],
+                'dist/css/<%= pkg.name %>-vendors.css' : [
+                    'src/vendor/css/**/*.css'
+                ]
+            }
           }
         },
         uglify: {
@@ -125,8 +141,8 @@ module.exports = function(grunt) {
             },
             dist: {
                 files: {
-                    'dist/js/<%= pkg.name %>.min.js': ['dev/js/<%= pkg.name %>.js'],
-                    'dist/js/<%= pkg.name %>-vendors.min.js': ['dev/js/<%= pkg.name %>-vendors.js']
+                    'dist/js/<%= pkg.name %>.min.js': ['dist/js/<%= pkg.name %>.js'],
+                    'dist/js/<%= pkg.name %>-vendors.min.js': ['dist/js/<%= pkg.name %>-vendors.js']
                 }
             }
         },
@@ -146,7 +162,7 @@ module.exports = function(grunt) {
         watch: {
             js : {
                 files: ['<%= jshint.files %>'],
-                tasks: ['jshint' , 'concat' ]
+                tasks: ['jshint' , 'concat:dev' ]
             },
             css : {
                 files: ['<%= stylus.dev.options.paths +"/**/*.styl" %>'],
@@ -176,6 +192,10 @@ module.exports = function(grunt) {
                 ]
             }
         },  
+        clean: {
+          js: ["dist/js/*.js", "!dist/js/*.min.js"],
+          css: ["dist/css/*.css", "!dist/css/*.min.css"]
+        },
         imagemin: {
             dist: {
                 files: [
@@ -210,6 +230,7 @@ module.exports = function(grunt) {
 
     });
     grunt.loadNpmTasks('grunt-newer');
+    grunt.loadNpmTasks('grunt-bower');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
@@ -218,19 +239,17 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-imagemin');
-
-    grunt.loadNpmTasks('grunt-template-html');
-    grunt.loadNpmTasks('grunt-bower');
-
+    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-template-html');
 
     
     grunt.registerTask('setup', ['bower' , 'dev']);
     grunt.registerTask('deploy', ['bower' , 'dist']);
 
-    grunt.registerTask('default', ['jshint', 'concat','stylus:dev', 'template:dev' , 'newer:copy:dev', 'watch',  'connect:dev' ]);
+    grunt.registerTask('default', ['jshint', 'concat:dev','stylus:dev', 'template:dev' , 'newer:copy:dev', 'watch',  'connect:dev' ]);
     grunt.registerTask('dev', ['default']);
-    grunt.registerTask('dist', ['jshint', 'concat', 'uglify' , 'stylus', 'cssmin' ,'template:dist' , 'newer:imagemin:dist']);
+    grunt.registerTask('dist', ['jshint', 'concat:dist', 'uglify' , 'stylus:dist', 'cssmin' ,'template:dist' , 'newer:imagemin:dist' , 'clean']);
     grunt.registerTask('dist:test', ['dist', "connect:dist:keepalive"]);
  
    
