@@ -163,18 +163,6 @@ module.exports = function(grunt) {
             
         },
         copy: {
-            dist: {
-                files: [
-                    {
-                        expand:true,
-                        cwd: "src/images/",
-                        src: ["**"],
-                        dest: "dist/images/",
-                        filter: 'isFile'
-                    }
-
-                ]
-            },
             dev: {
                 files: [
                     {
@@ -187,7 +175,21 @@ module.exports = function(grunt) {
 
                 ]
             }
-        },     
+        },  
+        imagemin: {
+            dist: {
+                files: [
+                    {
+                        // Set to true to enable the following options…
+                        expand: true,
+                        // cwd is 'current working directory'
+                        cwd: 'src/images/',
+                        src: ['**/*.{png,jpg}'],
+                        dest: 'dist/images/'
+                    }
+                ]
+            }
+        },
         connect: {
             dev: {
                 options: {
@@ -207,6 +209,7 @@ module.exports = function(grunt) {
         }
 
     });
+    grunt.loadNpmTasks('grunt-newer');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
@@ -214,6 +217,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-stylus');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-imagemin');
+
     grunt.loadNpmTasks('grunt-template-html');
     grunt.loadNpmTasks('grunt-bower');
 
@@ -223,10 +228,10 @@ module.exports = function(grunt) {
     grunt.registerTask('setup', ['bower' , 'dev']);
     grunt.registerTask('deploy', ['bower' , 'dist']);
 
-    grunt.registerTask('default', ['jshint', 'concat','stylus:dev', 'template:dev' , 'connect:dev' , 'copy:dev', 'watch']);
+    grunt.registerTask('default', ['jshint', 'concat','stylus:dev', 'template:dev' , 'newer:copy:dev', 'watch',  'connect:dev' ]);
     grunt.registerTask('dev', ['default']);
-    grunt.registerTask('dist', ['jshint', 'concat', 'uglify' , 'stylus', 'cssmin' ,'template:dist' , 'copy:dist']);
-    grunt.registerTask('dist:test', ['jshint', 'concat', 'uglify' , 'stylus', 'cssmin' ,'template:dist' ,'copy:dist' , "connect:dist"]);
+    grunt.registerTask('dist', ['jshint', 'concat', 'uglify' , 'stylus', 'cssmin' ,'template:dist' , 'newer:imagemin:dist']);
+    grunt.registerTask('dist:test', ['dist', "connect:dist"]);
  
    
 };
