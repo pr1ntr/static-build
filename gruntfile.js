@@ -231,7 +231,7 @@ module.exports = function(grunt) {
     grunt.registerTask('default', ['jshint', 'concat','stylus:dev', 'template:dev' , 'newer:copy:dev', 'watch',  'connect:dev' ]);
     grunt.registerTask('dev', ['default']);
     grunt.registerTask('dist', ['jshint', 'concat', 'uglify' , 'stylus', 'cssmin' ,'template:dist' , 'newer:imagemin:dist']);
-    grunt.registerTask('dist:test', ['dist', "connect:dist"]);
+    grunt.registerTask('dist:test', ['dist', "connect:dist:keepalive"]);
  
    
 };
