@@ -50,7 +50,7 @@ module.exports = function(grunt) {
                     {
                         expand: true,     // Enable dynamic expansion.
                         cwd: 'src/html/',      // Src matches are relative to this path.
-                        src: '*.html', // Actual pattern(s) to match.
+                        src: '*.ejs', // Actual pattern(s) to match.
                         dest: 'dev/',   // Destination path prefix.
                         ext: '.html'  // Dest filepaths will have this extension.
                     }
@@ -69,7 +69,7 @@ module.exports = function(grunt) {
                     {
                         expand: true,     // Enable dynamic expansion.
                         cwd: 'src/html/',      // Src matches are relative to this path.
-                        src: '*.html', // Actual pattern(s) to match.
+                        src: '*.ejs', // Actual pattern(s) to match.
                         dest: 'dist/',   // Destination path prefix.
                         ext: '.html'  // Dest filepaths will have this extension.
                     }
