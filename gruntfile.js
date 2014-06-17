@@ -83,7 +83,7 @@ module.exports = function(grunt) {
               banner: '/* minified vendor css file */'
             },
             files: {
-              'dist/css/<%= pkg.name %>-vendors-min.css': ['dist/css/<%= pkg.name %>-vendors.css']
+              'dist/css/<%= pkg.name %>-vendors.min.css': ['dist/css/<%= pkg.name %>-vendors.css']
             }
           }
         },
