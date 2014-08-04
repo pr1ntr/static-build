@@ -30,7 +30,7 @@ module.exports = function(grunt) {
                     ]
                 },
                 files: {
-                    'dev/css/<%= pkg.name %>.css': 'src/stylus/index.styl', // 1:1 compile
+                    'dev/css/<%= pkg.name %>.css': 'src/stylus/index.styl' // 1:1 compile
                     
                 }
             }
@@ -94,7 +94,23 @@ module.exports = function(grunt) {
             css_dest: 'src/vendor/css'
           }
         },
+        browserify:{
+            "dist": {
+                "files": {
+                    "dev/js/<%= pkg.name %>.js" : ["src/app/main.coffee"]
+                },
+                "options": {
+                    "bundleOptions" : {
+                        "debug" : true
+                    }
+                }
 
+            },
+            "options": {
+                "transform": ["coffeeify"]
+            }
+
+        },
         concat: {
           options: {
             // define a string to put between each file in the concatenated output
@@ -110,6 +126,9 @@ module.exports = function(grunt) {
                     'src/js/**/*.js'
                 ],
                 'dev/js/<%= pkg.name %>-vendors.js' : [
+                    'src/vendor/js/jquery.js',
+                    'src/vendor/js/underscore.js',
+                    'src/vendor/js/backbone.js',
                     'src/vendor/js/**/*.js'
                 ],
                 'dev/css/<%= pkg.name %>-vendors.css' : [
@@ -148,7 +167,7 @@ module.exports = function(grunt) {
         },
         jshint: {
             // define the files to lint
-            files: ['gruntfile.js', 'src/js/**/*.js'],
+            files: ['gruntfile.js', 'src/js/**/*.js' ],
             // configure JSHint (documented at http://www.jshint.com/docs/)
             options: {
             // more options here if you want to override JSHint defaults
@@ -161,8 +180,8 @@ module.exports = function(grunt) {
         },
         watch: {
             js : {
-                files: ['<%= jshint.files %>'],
-                tasks: ['jshint' , 'concat:dev' ]
+                files: ['<%= jshint.files %>' , "src/app/**/**.coffee"],
+                tasks: ['jshint' , 'concat:dev', 'browserify' ]
             },
             css : {
                 files: ['<%= stylus.dev.options.paths +"/**/*.styl" %>'],
@@ -243,11 +262,13 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-template-html');
 
+    grunt.loadNpmTasks('grunt-browserify');
+
     
     grunt.registerTask('setup', ['bower' , 'dev']);
     grunt.registerTask('deploy', ['bower' , 'dist']);
 
-    grunt.registerTask('default', ['jshint', 'concat:dev','stylus:dev', 'template:dev' , 'newer:copy:dev',  'connect:dev', 'watch' ]);
+    grunt.registerTask('default', ['jshint', 'concat:dev','stylus:dev', 'template:dev' , 'newer:copy:dev','browserify', 'connect:dev', 'watch' ]);
     grunt.registerTask('dev', ['default']);
     grunt.registerTask('dist', ['jshint', 'concat:dist', 'uglify' , 'stylus:dist', 'cssmin' ,'template:dist' , 'newer:imagemin:dist' , 'clean']);
     grunt.registerTask('dist:test', ['dist', "connect:dist:keepalive"]);

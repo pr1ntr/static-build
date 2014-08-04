@@ -17,6 +17,8 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "~2.1.1"
+    "jquery": "~2.1.1",
+    "pixi.js": "~1.6.1",
+    "hammerjs": "~2.0.2"
   }
 }
