@@ -95,19 +95,33 @@ module.exports = function(grunt) {
           }
         },
         browserify:{
-            "dist": {
-                "files": {
+            dev: {
+                files: {
                     "dev/js/<%= pkg.name %>.js" : ["src/app/main.coffee"]
                 },
-                "options": {
-                    "bundleOptions" : {
-                        "debug" : true
+                options: {
+                    bundleOptions : {
+                        debug : true
                     }
                 }
 
             },
-            "options": {
-                "transform": ["coffeeify"]
+            options: {
+                transform: ["coffeeify"]
+            },
+            dist: {
+                files: {
+                    "dist/js/<%= pkg.name %>.js" : ["src/app/main.coffee"]
+                },
+                options: {
+                    bundleOptions : {
+                        debug : false
+                    }
+                }
+
+            },
+            options: {
+                transform: ["coffeeify"]
             }
 
         },
@@ -268,9 +282,9 @@ module.exports = function(grunt) {
     grunt.registerTask('setup', ['bower' , 'dev']);
     grunt.registerTask('deploy', ['bower' , 'dist']);
 
-    grunt.registerTask('default', ['jshint', 'concat:dev','stylus:dev', 'template:dev' , 'newer:copy:dev','browserify', 'connect:dev', 'watch' ]);
+    grunt.registerTask('default', ['jshint', 'concat:dev','stylus:dev', 'template:dev' , 'newer:copy:dev','browserify:dev', 'connect:dev', 'watch' ]);
     grunt.registerTask('dev', ['default']);
-    grunt.registerTask('dist', ['jshint', 'concat:dist', 'uglify' , 'stylus:dist', 'cssmin' ,'template:dist' , 'newer:imagemin:dist' , 'clean']);
+    grunt.registerTask('dist', ['jshint', 'concat:dist', 'uglify' , 'stylus:dist', 'cssmin' ,'template:dist' ,'browserify:dist', 'newer:imagemin:dist' , 'clean']);
     grunt.registerTask('dist:test', ['dist', "connect:dist:keepalive"]);
  
    
