@@ -119,9 +119,6 @@ module.exports = function(grunt) {
                     }
                 }
 
-            },
-            options: {
-                transform: ["coffeeify"]
             }
 
         },
