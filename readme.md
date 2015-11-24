@@ -1,4 +1,4 @@
-## TATIC BUILD
+## STATIC BUILD
 
 #### Pre-requisites
 * Node.js 4.2+
